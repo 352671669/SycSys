@@ -23,3 +23,7 @@ def contact(request):
     联系页
     """
     return render(request, 'home_application/contact.html')
+
+
+def hello(request):
+    return render(request, 'home_application/hello.html')
