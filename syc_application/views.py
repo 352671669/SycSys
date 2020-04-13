@@ -17,6 +17,13 @@ def get_business(request):
     return JsonResponse(businesses)
 
 
+# 获取脚本
+def get_scripts(request):
+    client = get_client_by_request(request)
+    scripts = client.job.get_script_list(bk_biz_id=3)
+    return JsonResponse(scripts)
+
+
 # 获取主机
 def get_hosts(request):
     res = {}
@@ -28,7 +35,7 @@ def get_hosts(request):
     }
     items = []
     client = get_client_by_request(request)
-    hosts = client.cc.search_host(bk_biz_id=request.GET.get("id"))
+    hosts = client.cc.search_host(bk_biz_id=3)
     for index, item in enumerate(hosts["data"]["info"]):
         items.append({"choise": '<input type="radio">',
                       "index": index,
@@ -38,3 +45,19 @@ def get_hosts(request):
 
     res["items"] = items
     return JsonResponse(res)
+
+
+def excute_script(request):
+    bk_biz_id = request.POST.get("businessId")
+    script_id = request.POST.get("scriptId")
+    client = get_client_by_request(request)
+    result = client.job.fast_execute_script(bk_biz_id=3, script_id=script_id,
+                                            ip_list=[
+                                                {
+                                                    "bk_cloud_id": 0,
+                                                    "ip": "10.0.2.15"
+                                                }],
+                                            account="352671669"
+                                            )
+    # print(str(result))
+    return JsonResponse(result)

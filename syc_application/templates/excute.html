@@ -72,7 +72,7 @@
             <div class="form-group clearfix ">
                 <label class="col-sm-3 control-label bk-lh30 pt0">选择业务：</label>
                 <div class="col-sm-9">
-                    <select name="" id="busSele" class="form-control bk-valign-top">
+                    <select id="busSele" name="" class="form-control bk-valign-top">
                         <option value="请选择">请选择</option>
                     </select>
                 </div>
@@ -80,17 +80,18 @@
             <div class="form-group clearfix ">
                 <label class="col-sm-3 control-label bk-lh30 pt0">选择脚本：</label>
                 <div class="col-sm-9">
-                    <select name="" id="" class="form-control bk-valign-top">
-                        {% for s in scripts %}
-                            <option value="{{ s.name }}">{{ s.name }}</option>
-                        {% endfor %}
+                    <select name="" id="scriptSele" class="form-control bk-valign-top">
+                        <option value="请选择">请选择</option>
+                        {#                        {% for s in scripts %}#}
+                        {#                            <option value="{{ s.name }}">{{ s.name }}</option>#}
+                        {#                        {% endfor %}#}
                     </select>
                 </div>
             </div>
             <br>
             <div class="form-group clearfix">
                 <div class="col-sm-9 col-sm-offset-3">
-                    <button type="button" class="king-btn mr10  king-success">提交</button>
+                    <button id="submit" type="button" class="king-btn mr10  king-success">提交</button>
                 </div>
             </div>
             <table class="table mb0 pr15 ranger-box2  ">
@@ -103,24 +104,24 @@
             </table>
             <template id="header_tpl_15865757079322">
                 <tr>
-                    <th style="width: 70px;">#choise#</th>
+                    <th style="width: 70px;">选择</th>
                     <th style="width: 15%;">#index#</th>
                     <th style="width: 15%;">#ip#</th>
                     <th style="width: 15%;">#os#</th>
-                    <th>操作</th>
+                    {#                    <th>操作</th>#}
                 </tr>
             </template>
             <template id="tpl_15865757079322">
                 <tr>
-                    <td style="width: 70px;">#choise#</td>
+                    <td style="width: 10%;"><input name="select" type="radio"></td>
                     <td style="width: 15%;">#index#</td>
                     <td style="width: 15%;">#ip#</td>
                     <td style="width: 15%;">#os#</td>
-                    <td>
-                        <button class="btn btn-xs btn-success"><i class="glyphicon glyphicon-ok"></i></button>
-                        <button class="btn btn-xs btn-warning"><i class="glyphicon glyphicon-edit"></i></button>
-                        <button class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
-                    </td>
+                    {#                    <td>#}
+                    {#                        <button class="btn btn-xs btn-success"><i class="glyphicon glyphicon-ok"></i></button>#}
+                    {#                        <button class="btn btn-xs btn-warning"><i class="glyphicon glyphicon-edit"></i></button>#}
+                    {#                        <button class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-remove"></i></button>#}
+                    {#                    </td>#}
                 </tr>
             </template>
             <!-- 设置面板End -->
@@ -129,24 +130,28 @@
     </div>
 </div>
 <script>
-    $(function () {
+    $("#submit").click(function () {
+        let businessId = $("#busSele").val()
+        let scriptId = $("#scriptSele").val()
+        if (scriptId === "请选择" || businessId === "请选择") {
+            return
+        }
+        {#$("input[name='select']:checked")#}
         $.ajax({
-            url: 'get_business',
-            type: 'GET',
+            url: "excute_script",
+            type: "POST",
+            data: {
+                "businessId": businessId,
+                "scriptId": scriptId,
+                'csrfmiddlewaretoken': '{{ csrf_token }}',
+            },
             success: function (res) {
-                let busSele = $("#busSele")
-                for (let i = 0; i < res.data.count; i++) {
-                    let bk_biz_name = res.data.info[i].bk_biz_name
-                    let bk_biz_id = res.data.info[i].bk_biz_id
-                    busSele.append("<option value='" + bk_biz_id + "'>" + bk_biz_name + "</option>")
-                }
-
+                console.log(res)
             }
-        });
+        })
+    })
 
-    });
-
-    $("#busSele").change(function () {
+    $(function () {
         function renderTpl(str, cfg) {
             var re = /(#(.+?)#)/g;
 
@@ -159,7 +164,6 @@
             });
         }
 
-        // 异步请求后台数据
         $.ajax({
             url: 'get_hosts',
             type: 'GET',
@@ -177,6 +181,39 @@
                 $('.ranger-box2 thead').html(renderTpl(headerTpl, res.catalogues));
             }
         });
+        $.ajax({
+            url: 'get_business',
+            type: 'GET',
+            success: function (res) {
+                let busSele = $("#busSele")
+                for (let i = 0; i < res.data.count; i++) {
+                    let bk_biz_name = res.data.info[i].bk_biz_name
+                    let bk_biz_id = res.data.info[i].bk_biz_id
+                    busSele.append("<option value='" + bk_biz_id + "'>" + bk_biz_name + "</option>")
+
+                }
+
+            }
+        });
+        $.ajax({
+            url: 'get_scripts',
+            type: 'GET',
+            success: function (res) {
+                let scriptSele = $("#scriptSele")
+                for (let i = 0; i < res.data.data.length; i++) {
+                    let id = res.data.data[i].id
+                    let name = res.data.data[i].name
+                    scriptSele.append("<option value='" + id + "'>" + name + "</option>")
+
+                }
+
+            }
+        });
+
+    });
+
+    $("#busSele").change(function () {
+
     })
 
 </script>
