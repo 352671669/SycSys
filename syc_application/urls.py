@@ -16,12 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.contrib.auth.views import LoginView, LogoutView
-from .views import excute
-
+from .views import excute, get_business, get_hosts
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('excute/', excute),
-
+    path('excute/get_business', get_business),
+    path('excute/get_hosts', get_hosts),
 
 ]
