@@ -61,7 +61,7 @@ def excute_script(request):
         "account": "root"
     }
     result = client.job.fast_execute_script(kwargs)
-    excuteInfo = ExcuteInfo(context=result)
-    excuteInfo.save()
+    # excuteInfo = ExcuteInfo(context=result)
+    # excuteInfo.save()
     # print(str(result))
     return JsonResponse(result)
