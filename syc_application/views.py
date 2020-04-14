@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import script
+from .models import script, ExcuteInfo
 from blueking.component.shortcuts import get_client_by_user, get_client_by_request
 from django.http import HttpResponse, JsonResponse
 
@@ -51,13 +51,17 @@ def excute_script(request):
     bk_biz_id = request.POST.get("businessId")
     script_id = request.POST.get("scriptId")
     client = get_client_by_request(request)
-    result = client.job.fast_execute_script(bk_biz_id=3, script_id=script_id,
-                                            ip_list=[
-                                                {
-                                                    "bk_cloud_id": 0,
-                                                    "ip": "10.0.2.15"
-                                                }],
-                                            account="352671669"
-                                            )
+    kwargs = {
+        "bk_biz_id": 3,
+        "script_id": script_id,
+        "ip_list": [{
+            "bk_cloud_id": 0,
+            "ip": "10.0.2.15"
+        }],
+        "account": "root"
+    }
+    result = client.job.fast_execute_script(kwargs)
+    excuteInfo = ExcuteInfo(context=result)
+    excuteInfo.save()
     # print(str(result))
     return JsonResponse(result)

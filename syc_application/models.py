@@ -10,6 +10,6 @@ class script(models.Model):
 
 
 class ExcuteInfo(models.Model):
-    script = models.CharField(max_length=50, unique=True)
-    busniess = models.CharField(max_length=50, unique=True)
+    context = models.CharField(max_length=255, unique=True, null=False, blank=False)
     excute_time = models.DateTimeField(auto_now_add=True)
+
