@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import script, ExcuteInfo
+from .models import Script, ExcuteInfo
 from blueking.component.shortcuts import get_client_by_user, get_client_by_request
 from django.http import HttpResponse, JsonResponse
 from celery import task
@@ -9,7 +9,7 @@ from celery.task import periodic_task
 
 # Create your views here.
 def excute(request):
-    scripts = script.objects.all()
+    scripts = Script.objects.all()
     return render(request, "excute.html", {"scripts": scripts})
 
 
@@ -51,9 +51,15 @@ def get_hosts(request):
 
 
 def excute_script(request):
-    bk_biz_id = request.POST.get("businessId")
-    script_id = request.POST.get("scriptId")
     client = get_client_by_request(request)
+    async_log_excute_script.delay(request.POST, client)
+    return HttpResponse("提交成功")
+
+
+@task
+def async_log_excute_script(post, client):
+    bk_biz_id = post.get("businessId")
+    script_id = post.get("scriptId")
     kwargs = {
         "bk_biz_id": 3,
         "script_id": script_id,
@@ -63,13 +69,6 @@ def excute_script(request):
         }],
         "account": "root"
     }
-    result = client.job.fast_execute_script(kwargs)
-    async_log_excute_script.delay(result)
-    # print(str(result))
-    return JsonResponse(result)
-
-
-@task
-def async_log_excute_script(context):
-    excuteInfo = ExcuteInfo(context=context)
-    excuteInfo.save()
+    result_api = client.job.fast_execute_script(kwargs)
+    excute_info = ExcuteInfo(celery_id=async_log_excute_script.request.id, context=result_api)
+    excute_info.save()
