@@ -2,6 +2,9 @@ from django.shortcuts import render
 from .models import script, ExcuteInfo
 from blueking.component.shortcuts import get_client_by_user, get_client_by_request
 from django.http import HttpResponse, JsonResponse
+from celery import task
+from celery.schedules import crontab
+from celery.task import periodic_task
 
 
 # Create your views here.
@@ -61,7 +64,12 @@ def excute_script(request):
         "account": "root"
     }
     result = client.job.fast_execute_script(kwargs)
-    # excuteInfo = ExcuteInfo(context=result)
-    # excuteInfo.save()
+    async_log_excute_script.delay(result)
     # print(str(result))
     return JsonResponse(result)
+
+
+@task
+def async_log_excute_script(context):
+    excuteInfo = ExcuteInfo(context=context)
+    excuteInfo.save()
