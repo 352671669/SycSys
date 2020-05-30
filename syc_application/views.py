@@ -13,6 +13,10 @@ def excute(request):
     return render(request, "excute.html", {"scripts": scripts})
 
 
+def history(request):
+    return render(request, "history.html")
+
+
 # 获取业务
 def get_business(request):
     client = get_client_by_request(request)
@@ -44,6 +48,28 @@ def get_hosts(request):
                       "index": index,
                       "ip": item["host"]["bk_host_innerip"],
                       "os": item["host"]["bk_os_name"],
+                      })
+
+    res["items"] = items
+    return JsonResponse(res)
+
+
+# 获取历史
+def get_histories(request):
+    res = {}
+    res["catalogues"] = {
+        "choise": "选择",
+        "id": "ID",
+        "context": "执行返回值",
+        "excute_time": "执行时间",
+    }
+    items = []
+    histories = ExcuteInfo.objects.all()
+    for history in histories:
+        items.append({"choise": '<input type="radio">',
+                      "id": history.celery_id,
+                      "context": history.context,
+                      "excute_time": history.excute_time,
                       })
 
     res["items"] = items

@@ -50,7 +50,7 @@
                     </div>
                     <ul class="nav navbar-nav pull-left m0">
                         <li class="active"><a href="javascript:void(0);">执行任务</a></li>
-                        <li><a href="javascript:void(0);">任务记录</a></li>
+                        <li><a href="/history/">任务记录</a></li>
                     </ul>
                     <div class="navbar-header pull-right">
                         <ul class="nav">
@@ -134,6 +134,7 @@
         let businessId = $("#busSele").val()
         let scriptId = $("#scriptSele").val()
         if (scriptId === "请选择" || businessId === "请选择") {
+            alert("请选择业务和脚本")
             return
         }
         $.ajax({
@@ -146,20 +147,21 @@
             },
             success: function (res) {
                 alert(res)
+                location.reload()
             }
         })
     })
 
     $(function () {
         function renderTpl(str, cfg) {
-            var re = /(#(.+?)#)/g;
+            let re = /(#(.+?)#)/g
 
             return str.replace(re, function () {
-                var val = cfg[arguments[2]] + '';
+                let val = cfg[arguments[2]] + ''
                 if (typeof val == 'undefined') {
-                    val = '';
+                    val = ''
                 }
-                return val;
+                return val
             });
         }
 
