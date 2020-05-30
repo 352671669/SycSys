@@ -1,3 +1,5 @@
+# -*- coding:utf-8 -*-
+
 from django.shortcuts import render
 from .models import Script, ExcuteInfo
 from blueking.component.shortcuts import get_client_by_user, get_client_by_request
