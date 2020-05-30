@@ -157,20 +157,20 @@
         }
 
         $.ajax({
-            url: 'get_histories',
+            url: '/o/syc/get_histories',
             type: 'GET',
             success: function (res) {
                 console.log(res)
-                var _html = ' ';
-                var list = res.items;
-                var tpl = $('#tpl_15865757079322').html();
-                var headerTpl = $('#header_tpl_15865757079322').html();
-                for (var i = 0, len = list.length; i < len; i++) {
-                    var item = list[i];
+                let _html = ' '
+                let list = res.items
+                let tpl = $('#tpl_15865757079322').html()
+                let headerTpl = $('#header_tpl_15865757079322').html()
+                for (let i = 0, len = list.length; i < len; i++) {
+                    var item = list[i]
                     _html += renderTpl(tpl, item)
                 }
-                $('.ranger-box2 tbody').html(_html);
-                $('.ranger-box2 thead').html(renderTpl(headerTpl, res.catalogues));
+                $('.ranger-box2 tbody').html(_html)
+                $('.ranger-box2 thead').html(renderTpl(headerTpl, res.catalogues))
             }
         });
     })

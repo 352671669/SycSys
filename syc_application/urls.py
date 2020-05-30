@@ -25,5 +25,5 @@ urlpatterns = [
     url('^excute_script$', excute_script),
     url('^get_scripts$', get_scripts),
     url('^history/$', history),
-    url('^history/get_histories$', get_histories),
+    url('^get_histories$', get_histories),
 ]

@@ -56,13 +56,12 @@ def get_hosts(request):
 
 # 获取历史
 def get_histories(request):
-    res = {}
-    res["catalogues"] = {
+    res = {"catalogues": {
         "choise": "选择",
         "id": "ID",
         "context": "执行返回值",
         "excute_time": "执行时间",
-    }
+    }}
     items = []
     histories = ExcuteInfo.objects.all()
     for history in histories:
