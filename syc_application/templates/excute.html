@@ -133,8 +133,10 @@
     $("#submit").click(function () {
         let businessId = $("#busSele").val()
         let scriptId = $("#scriptSele").val()
-        if (scriptId === "请选择" || businessId === "请选择") {
-            alert("请选择业务和脚本")
+        let item = $('input:radio:checked')[0]
+        console.log(item)
+        if (scriptId === "请选择" || businessId === "请选择" || !item) {
+            alert("请选择业务、脚本和主机")
             return
         }
         $.ajax({
