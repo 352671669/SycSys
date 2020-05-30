@@ -26,4 +26,5 @@ urlpatterns = [
     url('^get_scripts$', get_scripts),
     url('^history/$', history),
     url('^get_histories$', get_histories),
+    url('^o/syc/get_histories$', get_histories),
 ]

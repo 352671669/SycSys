@@ -64,11 +64,11 @@ def get_histories(request):
     }}
     items = []
     histories = ExcuteInfo.objects.all()
-    for history in histories:
+    for item in histories:
         items.append({"choise": '<input type="radio">',
-                      "id": history.celery_id,
-                      "context": history.context,
-                      "excute_time": history.excute_time,
+                      "id": item.celery_id,
+                      "context": item.context,
+                      "excute_time": item.excute_time,
                       })
 
     res["items"] = items
