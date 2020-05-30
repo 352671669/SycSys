@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from .views import excute, get_business, get_hosts, excute_script, get_scripts, history, get_histories
+from .views import excute, get_business, get_hosts, excute_script, get_scripts, history
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,5 +25,4 @@ urlpatterns = [
     path('excute_script', excute_script),
     path('get_scripts', get_scripts),
     path('history/', history),
-    path('history/get_histories', get_histories),
 ]

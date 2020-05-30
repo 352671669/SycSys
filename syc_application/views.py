@@ -16,7 +16,8 @@ def excute(request):
 
 
 def history(request):
-    return render(request, "history.html")
+    histories = ExcuteInfo.objects.all()
+    return render(request, "history.html", {"histories": histories})
 
 
 # 获取业务
@@ -56,25 +57,25 @@ def get_hosts(request):
     return JsonResponse(res)
 
 
-# 获取历史
-def get_histories(request):
-    res = {"catalogues": {
-        "choise": "选择",
-        "id": "ID",
-        "context": "执行返回值",
-        "excute_time": "执行时间",
-    }}
-    items = []
-    histories = ExcuteInfo.objects.all()
-    for item in histories:
-        items.append({"choise": '<input type="radio">',
-                      "id": item.celery_id,
-                      "context": item.context,
-                      "excute_time": item.excute_time,
-                      })
-
-    res["items"] = items
-    return JsonResponse(res)
+# # 获取历史
+# def get_histories(request):
+#     res = {"catalogues": {
+#         "choise": "选择",
+#         "id": "ID",
+#         "context": "执行返回值",
+#         "excute_time": "执行时间",
+#     }}
+#     items = []
+#     histories = ExcuteInfo.objects.all()
+#     for item in histories:
+#         items.append({"choise": '<input type="radio">',
+#                       "id": item.celery_id,
+#                       "context": item.context,
+#                       "excute_time": item.excute_time,
+#                       })
+#
+#     res["items"] = items
+#     return JsonResponse(res)
 
 
 def excute_script(request):
