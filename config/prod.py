@@ -25,8 +25,8 @@ DATABASES.update(
     {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': '120173501028_root',
-            'USER': '孙宇成1',
+            'NAME': '352671669_sycsycsyc',
+            'USER': 'sycsycsyc',
             'PASSWORD': 'szy6368718',
             'HOST': '10.0.2.8',
             'PORT': '3306',
